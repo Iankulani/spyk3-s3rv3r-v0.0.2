@@ -1,0 +1,65 @@
+# requirements.txt - Python dependencies
+# SPYK3-S3RV3R Core Requirements
+
+# Core dependencies
+requests>=2.28.0
+psutil>=5.9.0
+matplotlib>=3.5.0
+seaborn>=0.11.0
+numpy>=1.21.0
+reportlab>=3.6.0
+ipaddress>=1.0.23
+python-dateutil>=2.8.2
+pyfiglet>=0.8.post1
+colorama>=0.4.4
+tqdm>=4.64.0
+python-dotenv>=0.20.0
+pyyaml>=6.0
+
+# Network and security dependencies
+paramiko>=2.11.0
+scapy>=2.4.5
+python-nmap>=0.7.1
+dnspython>=2.2.0
+whois>=0.9.12
+socketio>=0.2.1
+websocket-client>=1.4.0
+
+# Social engineering dependencies
+qrcode[pil]>=7.4.0
+pyshorteners>=1.0.1
+pyotp>=2.7.0
+phonenumbers>=8.12.0
+
+# Bot integration dependencies
+discord.py>=2.1.0
+telethon>=1.28.0
+slack-sdk>=3.19.0
+slack-bolt>=1.17.0
+
+# Database and storage
+sqlalchemy>=1.4.46
+alembic>=1.8.0
+redis>=4.3.0
+
+# Web framework
+flask>=2.2.0
+flask-cors>=3.0.10
+flask-socketio>=5.3.0
+eventlet>=0.33.0
+werkzeug>=2.2.0
+
+# Testing and development
+pytest>=7.1.0
+pytest-cov>=3.0.0
+black>=22.3.0
+flake8>=4.0.0
+mypy>=0.950
+pylint>=2.14.0
+
+# Additional utilities
+schedule>=1.1.0
+aiofiles>=22.1.0
+aiohttp>=3.8.0
+asyncio>=3.4.3
+cryptography>=38.0.0

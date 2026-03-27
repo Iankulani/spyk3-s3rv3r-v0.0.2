@@ -1,0 +1,78 @@
+# Dockerfile for SPYK3-S3RV3R
+FROM python:3.10-slim
+
+LABEL maintainer="Ian Carter Kulani"
+LABEL description="SPYK3-S3RV3R Ultimate Cybersecurity Platform"
+
+# Set environment variables
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    DEBIAN_FRONTEND=noninteractive
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    # Network tools
+    iputils-ping \
+    traceroute \
+    net-tools \
+    nmap \
+    tcpdump \
+    libpcap-dev \
+    # Build tools
+    gcc \
+    g++ \
+    make \
+    build-essential \
+    # Python dependencies
+    python3-dev \
+    python3-tk \
+    # SSL and crypto
+    libssl-dev \
+    libffi-dev \
+    # Image processing
+    libjpeg-dev \
+    zlib1g-dev \
+    libtiff5-dev \
+    libfreetype6-dev \
+    liblcms2-dev \
+    libwebp-dev \
+    # Git for version control
+    git \
+    # Cleanup
+    && rm -rf /var/lib/apt/lists/*
+
+# Create working directory
+WORKDIR /app
+
+# Copy requirements first for better caching
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy application files
+COPY . .
+
+# Create necessary directories
+RUN mkdir -p .spyk3/{ssh_keys,payloads,phishing,traffic_logs,scans} \
+    spyk3_reports/graphics \
+    spyk3_reports/blocked \
+    spyk3_temp \
+    logs \
+    backups
+
+# Create non-root user for security
+RUN useradd -m -s /bin/bash spyk3 && \
+    chown -R spyk3:spyk3 /app
+
+USER spyk3
+
+# Expose ports
+# SSH: 22 (if needed), Phishing: 8080, Web interface: 5000
+EXPOSE 22 8080 5000
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD python3 -c "import sys; sys.exit(0)" || exit 1
+
+# Entry point
+ENTRYPOINT ["python3", "spyk3.py"]
+CMD []

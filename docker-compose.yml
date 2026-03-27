@@ -1,0 +1,42 @@
+# docker-compose.yml
+version: '3.8'
+
+services:
+  spyk3:
+    build: .
+    container_name: spyk3-server
+    hostname: spyk3
+    restart: unless-stopped
+    network_mode: host  # For raw socket access
+    privileged: true     # For network packet capture
+    volumes:
+      - ./spyk3_reports:/app/spyk3_reports
+      - ./.spyk3:/app/.spyk3
+      - ./logs:/app/logs
+      - ./backups:/app/backups
+    environment:
+      - PYTHONUNBUFFERED=1
+      - TZ=UTC
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+      - SYS_ADMIN
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    ports:
+      - "8080:8080"    # Phishing server
+      - "5000:5000"    # Web interface
+    # Uncomment for SSH forwarding
+    # ports:
+    #   - "2222:22"     # SSH (if enabled)
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    healthcheck:
+      test: ["CMD", "python3", "-c", "import sys; sys.exit(0)"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
